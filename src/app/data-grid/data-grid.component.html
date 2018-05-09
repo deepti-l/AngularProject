@@ -1,0 +1,32 @@
+<!--<ag-grid-angular 
+    style="width: 500px; height: 500px;" 
+    class="ag-theme-balham"
+    [enableSorting]="true"
+    [enableFilter]="true"
+    [rowData]="rowData" 
+    [columnDefs]="columnDefs"
+    >
+</ag-grid-angular>
+-->
+<div class="ag-theme-balham">
+<button (click)="exportData($event)">Export Data</button>
+</div>
+<ag-grid-angular style="height: 525px; width: 100%;" class="ag-theme-balham"
+
+                 [gridOptions]="gridOptions"
+                 [columnDefs]="columnDefs"
+                 [rowData]="rowData"
+
+                 [icons]="icons"
+
+                 enableColResize
+                 enableSorting
+                 enableFilter
+                 groupHeaders
+                 suppressRowClickSelection
+                 toolPanelSuppressGroups
+                 toolPanelSuppressValues
+                 rowSelection="multiple"
+                 pagination="true"
+                 (gridReady)="onReady($event)">
+</ag-grid-angular>
