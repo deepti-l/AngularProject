@@ -1,18 +1,20 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit,ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AlertService, AuthenticationService } from '../services/index';
-
+import {User} from '../models/index';
 @Component({
-    moduleId: module.id.toString(),
-    templateUrl: 'login.component.html'
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class LoginComponent implements OnInit {
-    model: any = {};
+    user: User=new User();
     loading = false;
     returnUrl: string;
-
+    errorMessage:string;
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -25,18 +27,35 @@ export class LoginComponent implements OnInit {
 
         // get return url from route parameters or default to '/'
          this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-         console.log("returnurl ",this.returnUrl);
+       
     }
 
     login() {
         this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
+        this.authenticationService.login(this.user)
             .subscribe(
-                data => {
-                     this.router.navigate(['/dataGrid']);
+               
+                token => {
+                    var name  = this.user.userName
+                    console.log("token  "+token);
+                    if(token){
+                        this.authenticationService.getUser(token,name).subscribe(
+                            data=>{
+                                this.loading = false;
+                                this.router.navigate([this.returnUrl]);
+                            },
+                            error=>{
+                                this.errorMessage=error.error.error_description;
+                                this.loading = false;
+                            }
+
+                        );
+                    }
+                   
                 },
                 error => {
-                    this.alertService.error(error);
+                  
+                    this.errorMessage=error.error.error_description;
                     this.loading = false;
                 });
     }

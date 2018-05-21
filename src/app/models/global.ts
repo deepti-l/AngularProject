@@ -14,3 +14,8 @@ export class User {
 
 
 }
+export class Clientdetails {
+    clientId:string="spring-security-oauth2-read-write-client";
+    clientPassword:string="spring-security-oauth2-read-write-client-password1234";
+    grantType:string ="password";
+}
